@@ -1,0 +1,76 @@
+﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Bot.Schema;
+
+namespace BotChatV4Demo
+{
+    public class DrinkCategories : SupportDialog
+    {
+        static BotState _userState;
+
+        public DrinkCategories(UserState userState) : base(nameof(DrinkCategories))
+        {
+            _userState = userState;
+
+            AddDialog(new OrderDialog(userState));
+            AddDialog(new TextPrompt(nameof(TextPrompt)));
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
+
+            AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
+            {
+                DrinkMenuStepAsync,
+                ReviewSelectionStepAsync,
+            }));
+
+            InitialDialogId = nameof(WaterfallDialog);
+        }
+
+        private static async Task<DialogTurnResult> DrinkMenuStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var attachmentList = new List<Attachment>();
+            foreach (var drinkMenuItem in ProductList.Drinks)
+            {
+                attachmentList.Add(CardService.CreateProductThumbnailCardMenu(drinkMenuItem).ToAttachment());
+            }
+            var reply = stepContext.Context.Activity.CreateReply();
+            reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            reply.Attachments = attachmentList;
+
+            var promptOptions = new PromptOptions()
+            {
+                RetryPrompt = reply
+            };
+
+            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
+            return await stepContext.PromptAsync(nameof(TextPrompt), promptOptions, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> ReviewSelectionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var userStateAccessors = _userState.CreateProperty<Order>(nameof(Order));
+            var order = await userStateAccessors.GetAsync(stepContext.Context, () => new Order());
+
+            var foundChoice = (string)stepContext.Result;
+
+            try
+            {
+                order.Cart = new List<Product>();
+                order.Cart.Add(ProductList.Drinks[ProductList.Drinks.IndexOf(ProductList.Drinks.First(drink => drink.Code == foundChoice))]);
+            }
+            catch (Exception)
+            {
+                //loop step when error
+                stepContext.ActiveDialog.State["stepIndex"] = (int)stepContext.ActiveDialog.State["stepIndex"] - 2;
+                return await stepContext.NextAsync();
+            }
+
+
+            return await stepContext.BeginDialogAsync(nameof(OrderDialog), order, cancellationToken);
+        }
+    }
+}

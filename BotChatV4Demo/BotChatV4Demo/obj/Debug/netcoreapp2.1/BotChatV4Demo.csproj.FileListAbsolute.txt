@@ -1,0 +1,15 @@
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\appsettings.json
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\BotChatV4Demo.deps.json
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\BotChatV4Demo.runtimeconfig.json
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\BotChatV4Demo.runtimeconfig.dev.json
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\BotChatV4Demo.dll
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.csprojAssemblyReference.cache
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.csproj.CoreCompileInputs.cache
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.RazorAssemblyInfo.cache
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.RazorAssemblyInfo.cs
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.AssemblyInfoInputs.cache
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.AssemblyInfo.cs
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.RazorTargetAssemblyInfo.cache
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\bin\Debug\netcoreapp2.1\BotChatV4Demo.pdb
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.dll
+D:\Dev\APPA\Bot\ChatBotDemo\BotChatV4Demo\BotChatV4Demo\obj\Debug\netcoreapp2.1\BotChatV4Demo.pdb

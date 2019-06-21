@@ -15,7 +15,6 @@ namespace BotChatV4Demo
             _userState = userState;
 
             AddDialog(new MainMenuDialog(userState));
-
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 InitialStepAsync,
@@ -32,6 +31,11 @@ namespace BotChatV4Demo
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            if (stepContext.Context.Activity.Text == "reset")
+            {
+                return await stepContext.ReplaceDialogAsync(nameof(RootDialog));
+            }
+
             var userStateAccessors = _userState.CreateProperty<Order>(nameof(Order));
             var order = await userStateAccessors.GetAsync(stepContext.Context, () => new Order());
 
@@ -40,13 +44,11 @@ namespace BotChatV4Demo
 
             await stepContext.Context.SendActivityAsync(status);
             
-            //return await stepContext.BeginDialogAsync(nameof(MainMenuDialog), cancellationToken);
-            return await stepContext.BeginDialogAsync(nameof(MainMenuDialog), cancellationToken);
+            return await stepContext.EndDialogAsync(cancellationToken);
         }
 
         public override Task<DialogTurnResult> ResumeDialogAsync(DialogContext dc, DialogReason reason, object result = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-
             return null;
         }
     }

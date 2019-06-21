@@ -13,7 +13,7 @@ namespace BotChatV4Demo
     {
         //qna maker
         protected static QnAMaker qnaMaker;
-
+        
         public SupportDialog(string id)
             : base(id)
         {
@@ -62,9 +62,12 @@ namespace BotChatV4Demo
                         });
                     }
 
-                    if (innerDc.Parent.ActiveDialog.Id == nameof(MainMenuDialog))
-                        return null;
+                    //if (innerDc.Parent.ActiveDialog.Id == nameof(MainMenuDialog))
+                    //    return null;
 
+                    if (innerDc.Stack.Count != 0)
+                        if (innerDc.Stack[0].Id == nameof(LUISDemo))
+                            return null;
 
                     var response = await qnaMaker.GetAnswersAsync(innerDc.Context);
                     try
@@ -76,18 +79,36 @@ namespace BotChatV4Demo
                         {
                             //options case
                             case "food":
+                                innerDc.Context.Activity.Text = "food";
+                                break;
                             case "drink":
+                                innerDc.Context.Activity.Text = "drink";
+                                break;
                             case "view order":
+                                innerDc.Context.Activity.Text = "view order";
+                                break;
+                            case "switch kb":
+                                innerDc.Context.Activity.Text = "switch kb";
+                                break;
+                            case "luis demo":
+                                innerDc.Context.Activity.Text = "luis demo";
+                                break;
+                            case "KB1":
+                                innerDc.Context.Activity.Text = "KB1";
+                                break;
+                            case "KB2":
+                                innerDc.Context.Activity.Text = "KB2";
                                 break;
                             case "reset":
-                                await innerDc.Context.SendActivityAsync($"I see, type anything to get started!", cancellationToken: cancellationToken);
-                                //await innerDc.CancelAllDialogsAsync(cancellationToken);
-                                innerDc.Context.Activity.Text = null;
+                                if(innerDc.Stack.Count != 0)
+                                    if (innerDc.Stack[0].Id == nameof(MainMenuDialog))
+                                        return null;
+                                innerDc.Context.Activity.Text = "reset";
+                                await innerDc.Context.SendActivityAsync($"I see, conversation reset!", cancellationToken: cancellationToken);
                                 return await innerDc.CancelAllDialogsAsync(cancellationToken);
                             case "stop":
-                                await innerDc.Context.SendActivityAsync($"I see!", cancellationToken: cancellationToken);
-                                await innerDc.Context.SendActivityAsync(MessageFactory.Text($"Thanks, see you!"));
-                                return await innerDc.CancelAllDialogsAsync();
+                                await innerDc.Context.SendActivityAsync($"I see, conversation stop!", cancellationToken: cancellationToken);
+                                return await innerDc.CancelAllDialogsAsync(cancellationToken);
                             default:
                                 await innerDc.Context.SendActivityAsync(choice, cancellationToken: cancellationToken);
                                 if(innerDc.Parent.ActiveDialog.Id != nameof(MainMenuDialog))

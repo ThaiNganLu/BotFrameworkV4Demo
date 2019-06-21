@@ -14,18 +14,17 @@ namespace BotChatV4Demo
     public class OrderDialog : SupportDialog
     {
         private static UserState _userState;
-        private static IStatePropertyAccessor<Order> localOrderAccessor;
-        private static IStatePropertyAccessor<Order> globalOrderAccessor;
-        private static Order localOrder = new Order();
-        private static Order globalOrder = new Order();
+        private static IStatePropertyAccessor<Order> localOrderAccessor; 
+        private static IStatePropertyAccessor<Order> globalOrderAccessor; 
+        private static Order localOrder = new Order(); //current order
+        private static Order globalOrder = new Order(); //main order
 
         public OrderDialog(UserState userState) : base(nameof(OrderDialog))
         {
             _userState = userState;
             localOrderAccessor = _userState.CreateProperty<Order>(nameof(Order));
             globalOrderAccessor = _userState.CreateProperty<Order>("OrderStorage");
-
-
+            
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>)));
@@ -45,7 +44,7 @@ namespace BotChatV4Demo
         {
             globalOrder = await globalOrderAccessor.GetAsync(stepContext.Context, () => new Order());
 
-            if (!string.IsNullOrEmpty(globalOrder?.Name))
+            if (!string.IsNullOrEmpty(globalOrder?.Name)) //Don't ask for customer's name if ordered
                 return await stepContext.NextAsync();
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter your name.") };
@@ -56,29 +55,25 @@ namespace BotChatV4Demo
         private async Task<DialogTurnResult> PhoneStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             globalOrder = await globalOrderAccessor.GetAsync(stepContext.Context, () => new Order());
-
             localOrder = await localOrderAccessor.GetAsync(stepContext.Context, () => new Order());
 
-            if (!string.IsNullOrEmpty(globalOrder?.Phone))
+            if (!string.IsNullOrEmpty(globalOrder?.Phone))//Don't ask for customer's phone if ordered
                 return await stepContext.NextAsync();
 
             localOrder.Name = (string)stepContext.Result;
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter your phone.") };
-
-            // Ask the user to enter their age.
+            
             return await stepContext.PromptAsync(nameof(NumberPrompt<long>), promptOptions, cancellationToken);
         }
 
         private async Task<DialogTurnResult> QuantityStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             localOrder = await localOrderAccessor.GetAsync(stepContext.Context, () => new Order());
-
             localOrder.Phone = ((int)stepContext.Result).ToString();
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter quantity of product.") };
-
-            // Ask the user to enter their age.
+            
             return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
         }
 

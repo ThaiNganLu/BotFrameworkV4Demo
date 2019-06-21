@@ -20,7 +20,6 @@ namespace BotChatV4Demo
             AddDialog(new OrderDialog(userState));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
-
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 DrinkMenuStepAsync,
@@ -60,7 +59,7 @@ namespace BotChatV4Demo
             try
             {
                 order.Cart = new List<Product>();
-                order.Cart.Add(ProductList.Drinks[ProductList.Drinks.IndexOf(ProductList.Drinks.First(drink => drink.Code == foundChoice))]);
+                order.Cart.Add(ProductList.Foods[ProductList.Foods.IndexOf(ProductList.Foods.First(food => food.Code == foundChoice))]);
             }
             catch (Exception)
             {
@@ -71,6 +70,15 @@ namespace BotChatV4Demo
 
 
             return await stepContext.BeginDialogAsync(nameof(OrderDialog), order, cancellationToken);
+        }
+        public override Task<DialogTurnResult> ResumeDialogAsync(DialogContext dc, DialogReason reason, object result = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return null;
+        }
+
+        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            return await stepContext.EndDialogAsync();
         }
     }
 }

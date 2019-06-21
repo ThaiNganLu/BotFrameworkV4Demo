@@ -75,7 +75,6 @@ namespace BotChatV4Demo
         }
         public override Task<DialogTurnResult> ResumeDialogAsync(DialogContext dc, DialogReason reason, object result = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-
             return null;
         }
 

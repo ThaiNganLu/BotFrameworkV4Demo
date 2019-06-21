@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Schema;
@@ -20,7 +19,6 @@ namespace BotChatV4Demo
             AddDialog(new OrderDialog(userState));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
-
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ViewOrderStepAsync,
@@ -45,17 +43,17 @@ namespace BotChatV4Demo
                 var reply = stepContext.Context.Activity.CreateReply();
                 reply.Attachments = new List<Attachment> { CardService.CreateOrder(orderProfile).ToAttachment() };
                 await stepContext.Context.SendActivityAsync(reply, cancellationToken);
-
             }
 
             promptOptions.Choices = new List<Choice> { new Choice("Back to Main menu"), new Choice("Stop") };
-
             return await stepContext.PromptAsync(nameof(ChoicePrompt), promptOptions, cancellationToken);
         }
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            return await stepContext.EndDialogAsync();
+            //loop step when error
+            stepContext.ActiveDialog.State["stepIndex"] = (int)stepContext.ActiveDialog.State["stepIndex"] - 2;
+            return await stepContext.NextAsync();
         }
     }
 }

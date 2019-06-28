@@ -24,6 +24,7 @@ namespace BotChatV4Demo
             AddDialog(new ReviewOrderDialog(userState));
             AddDialog(new SwitchKB(userState));
             AddDialog(new LUISDemo(userState));
+            AddDialog(new CardDemo());
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 MainMenuStepAsync,
@@ -79,6 +80,8 @@ namespace BotChatV4Demo
                         return await stepContext.BeginDialogAsync(nameof(SwitchKB), null, cancellationToken);
                     case "luis demo":
                         return await stepContext.BeginDialogAsync(nameof(LUISDemo), null, cancellationToken);
+                    case "card demo":
+                        return await stepContext.BeginDialogAsync(nameof(CardDemo), null, cancellationToken);
                     default:
                         stepContext.ActiveDialog.State["stepIndex"] = (int)stepContext.ActiveDialog.State["stepIndex"] - 2;
                         return await stepContext.NextAsync();

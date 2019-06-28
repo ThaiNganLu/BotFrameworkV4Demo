@@ -62,8 +62,8 @@ namespace BotChatV4Demo
                         });
                     }
 
-                    //if (innerDc.Parent.ActiveDialog.Id == nameof(MainMenuDialog))
-                    //    return null;
+                    if (innerDc.Parent.ActiveDialog.Id == nameof(MainMenuDialog))
+                        return null;
 
                     if (innerDc.Stack.Count != 0)
                         if (innerDc.Stack[0].Id == nameof(LUISDemo))
@@ -92,6 +92,9 @@ namespace BotChatV4Demo
                                 break;
                             case "luis demo":
                                 innerDc.Context.Activity.Text = "luis demo";
+                                break;
+                            case "card demo":
+                                innerDc.Context.Activity.Text = "card demo";
                                 break;
                             case "KB1":
                                 innerDc.Context.Activity.Text = "KB1";
